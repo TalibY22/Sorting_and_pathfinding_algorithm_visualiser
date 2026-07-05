@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Undergrowth — Algorithm Visualizer</title>
+  <meta name="description" content="A professional algorithm visualizer showcasing pathfinding, sorting, and backtracking algorithms with a deep forest theme.">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header>
+    <div class="brand">
+      
+      <h1>Talib<span>.tech</span></h1>
+    </div>
+
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" id="tab-pathfinding" data-tab="pathfinding"
+              role="tab" aria-selected="true" aria-controls="view-pathfinding">
+        <i data-lucide="compass"></i>
+        <span class="tab-label">Pathfinding</span>
+      </button>
+      <button class="tab-btn" id="tab-sorting" data-tab="sorting"
+              role="tab" aria-selected="false" aria-controls="view-sorting">
+        <i data-lucide="bar-chart-2"></i>
+        <span class="tab-label">Sorting</span>
+      </button>
+      <button class="tab-btn" id="tab-backtracking" data-tab="backtracking"
+              role="tab" aria-selected="false" aria-controls="view-backtracking">
+        <i data-lucide="grid"></i>
+        <span class="tab-label">Backtracking</span>
+      </button>
+    </nav>
+
+  
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+
+      <!-- Controls Card -->
+      <section class="paper-card" id="control-panel" aria-labelledby="controls-title">
+        <!-- Mobile: tappable header toggles body -->
+        <button class="panel-toggle" id="controls-toggle" aria-expanded="true" aria-controls="controls-body">
+          <h2 id="controls-title">
+            <i data-lucide="sliders"></i> Algorithm Controls
+            <i data-lucide="chevron-down" id="controls-chevron" style="margin-left:auto;"></i>
+          </h2>
+        </button>
+
+        <div class="panel-body" id="controls-body">
+
+          <!-- PATHFINDING CONTROLS -->
+          <div id="controls-pathfinding" class="algo-controls">
+            <div class="control-group">
+              <label for="select-path-algo">Algorithm</label>
+              <div class="select-wrapper">
+                <select id="select-path-algo">
+                  <option value="astar">A* Search (Optimal, Heuristic)</option>
+                  <option value="dijkstra">Dijkstra's Algorithm (Weighted)</option>
+                  <option value="bfs">Breadth-First Search</option>
+                  <option value="dfs">Depth-First Search</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="select-maze">Generate Maze</label>
+              <div class="select-wrapper">
+                <select id="select-maze">
+                  <option value="" disabled selected>Select a maze pattern…</option>
+                  <option value="random">Random Obstacles</option>
+                  <option value="recursive">Recursive Backtracking Maze</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="slider-path-speed">Visualization Speed</label>
+              <div class="slider-container">
+                <input type="range" id="slider-path-speed" min="1" max="100" value="50">
+                <span class="slider-val" id="path-speed-val">50</span>
+              </div>
+            </div>
+
+            <div class="btn-grid">
+              <button class="btn btn-primary btn-full" id="btn-start-path">
+                <i data-lucide="play"></i> Start Pathfinding
+              </button>
+              <button class="btn btn-secondary" id="btn-clear-path-walls">
+                <i data-lucide="trash-2"></i> Clear Walls
+              </button>
+              <button class="btn btn-secondary" id="btn-clear-path-all">
+                <i data-lucide="rotate-ccw"></i> Reset Board
+              </button>
+            </div>
+          </div>
+
+          <!-- SORTING CONTROLS -->
+          <div id="controls-sorting" class="algo-controls" style="display:none;">
+            <div class="control-group">
+              <label for="select-sort-algo">Algorithm</label>
+              <div class="select-wrapper">
+                <select id="select-sort-algo">
+                  <option value="bubble">Bubble Sort</option>
+                  <option value="insertion">Insertion Sort</option>
+                  <option value="selection">Selection Sort</option>
+                  <option value="quick">Quick Sort (Pivot-based)</option>
+                  <option value="merge">Merge Sort (Stable)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="select-sort-direction">Sort Order</label>
+              <div class="select-wrapper">
+                <select id="select-sort-direction">
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="slider-sort-size">Array Size</label>
+              <div class="slider-container">
+                <input type="range" id="slider-sort-size" min="10" max="120" value="50">
+                <span class="slider-val" id="sort-size-val">50</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="slider-sort-speed">Visualization Speed</label>
+              <div class="slider-container">
+                <input type="range" id="slider-sort-speed" min="1" max="100" value="70">
+                <span class="slider-val" id="sort-speed-val">70</span>
+              </div>
+            </div>
+
+            <div class="btn-grid">
+              <button class="btn btn-primary btn-full" id="btn-start-sort">
+                <i data-lucide="play"></i> Start Sorting
+              </button>
+              <button class="btn btn-secondary btn-full" id="btn-reset-sort">
+                <i data-lucide="sparkles"></i> Generate New Array
+              </button>
+            </div>
+          </div>
+
+          <!-- BACKTRACKING CONTROLS -->
+          <div id="controls-backtracking" class="algo-controls" style="display:none;">
+            <div class="control-group">
+              <label for="select-backtrack-algo">Algorithm</label>
+              <div class="select-wrapper">
+                <select id="select-backtrack-algo">
+                  <option value="nqueens">N-Queens Solver (Backtracking)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="slider-backtrack-size">Board Size (N × N)</label>
+              <div class="slider-container">
+                <input type="range" id="slider-backtrack-size" min="4" max="10" value="8">
+                <span class="slider-val" id="backtrack-size-val">8</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="slider-backtrack-speed">Solver Speed</label>
+              <div class="slider-container">
+                <input type="range" id="slider-backtrack-speed" min="1" max="100" value="50">
+                <span class="slider-val" id="backtrack-speed-val">50</span>
+              </div>
+            </div>
+
+            <div class="btn-grid">
+              <button class="btn btn-primary btn-full" id="btn-start-backtrack">
+                <i data-lucide="play"></i> Solve N-Queens
+              </button>
+              <button class="btn btn-secondary btn-full" id="btn-reset-backtrack">
+                <i data-lucide="rotate-ccw"></i> Clear Board
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /panel-body -->
+      </section>
+
+      <!-- Legend Card -->
+      <section class="paper-card" id="legend-panel" aria-labelledby="legend-title">
+        <button class="panel-toggle" id="legend-toggle" aria-expanded="true" aria-controls="legend-body">
+          <h2 id="legend-title">
+            <i data-lucide="info"></i> Visualizer Legend
+            <i data-lucide="chevron-down" id="legend-chevron" style="margin-left:auto;"></i>
+          </h2>
+        </button>
+
+        <div class="panel-body" id="legend-body">
+
+          <!-- Pathfinding Legend -->
+          <div id="legend-pathfinding" class="legend">
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-olive);color:var(--bg-forest);font-weight:700;">S</div>
+              <span>Start Node (drag to move)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-clay);color:#fff;font-weight:700;">E</div>
+              <span>Target Node (drag to move)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--node-wall);"></div>
+              <span>Wall — click/drag to draw; right-click to erase</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:rgba(140,160,90,0.18);border:1px solid rgba(140,160,90,0.15);"></div>
+              <span>Visited node</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-clay);box-shadow:0 0 8px rgba(184,129,74,0.4);"></div>
+              <span>Shortest path</span>
+            </div>
+          </div>
+
+          <!-- Sorting Legend -->
+          <div id="legend-sorting" class="legend" style="display:none;">
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-olive);"></div>
+              <span>Unsorted element</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-clay);"></div>
+              <span>Active comparison</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:#D49D65;"></div>
+              <span>Active swap</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:var(--accent-olive-light);"></div>
+              <span>Sorted element</span>
+            </div>
+          </div>
+
+          <!-- Backtracking Legend -->
+          <div id="legend-backtracking" class="legend" style="display:none;">
+            <div class="legend-item">
+              <div class="legend-color cell-light" style="border:1px solid rgba(0,0,0,.15);">👑</div>
+              <span>Queen placed safely</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:rgba(184,129,74,0.25);border:1px solid var(--accent-clay);"></div>
+              <span>Conflict / threatened cell</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color:rgba(140,160,90,0.3);border:1px solid var(--accent-olive);"></div>
+              <span>Safe placement found</span>
+            </div>
+          </div>
+
+        </div><!-- /panel-body -->
+      </section>
+
+    </aside>
+
+    <!-- ===== VISUALIZER AREA ===== -->
+    <section class="visualizer-container">
+
+      <!-- Board Card -->
+      <div class="visualizer-card" aria-label="Algorithm Visualisation Board">
+
+        <!-- Pathfinding -->
+        <div class="algo-view active" id="view-pathfinding">
+          <p class="touch-hint">Tap to place walls · Drag S / E to move nodes</p>
+          <div id="grid-wrapper">
+            <div id="grid" role="grid" aria-label="Pathfinding grid"></div>
+          </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="algo-view" id="view-sorting">
+          <div id="sorting-container" aria-label="Sorting bars"></div>
+        </div>
+
+        <!-- Backtracking -->
+        <div class="algo-view" id="view-backtracking">
+          <div class="chessboard-container">
+            <div id="chessboard" role="grid" aria-label="N-Queens chessboard"></div>
+            <p id="backtrack-stats">
+              Solutions found: <span id="solutions-count" style="color:var(--accent-clay-light);font-weight:bold;font-family:var(--font-serif);">0</span>
+              &nbsp;·&nbsp;
+              Steps: <span id="steps-count" style="color:var(--accent-olive-light);font-weight:bold;">0</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Algorithm Description -->
+      <footer class="paper-card info-card" aria-labelledby="info-title">
+        <h2 id="info-title"><i data-lucide="book-open"></i> Algorithm Information</h2>
+        <div class="info-content">
+          <h3 id="algo-name">A* Search Algorithm</h3>
+          <p id="algo-desc">A heuristic-driven pathfinding algorithm that calculates the shortest path from start to end by combining the distance traveled (G) and the estimated remaining distance (H) using Manhattan Distance.</p>
+          <div class="complexity-tag">
+            <span id="algo-time-complexity">Time: <strong>O(E log V)</strong></span>
+            <span id="algo-space-complexity">Space: <strong>O(V)</strong></span>
+          </div>
+        </div>
+      </footer>
+
+    </section>
+
+  </main>
+
+  
+
+  <script src="app.js"></script>
+</body>
+</html>
