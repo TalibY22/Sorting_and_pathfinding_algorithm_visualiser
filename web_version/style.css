@@ -597,7 +597,8 @@ input[type="range"]::-webkit-slider-thumb:active {
   .btn-full { grid-column: span 1; }
 
   .visualizer-card {
-    height: 60vh;
+    /* dvh = dynamic viewport height — stays stable even as mobile browser chrome hides */
+    height: 60dvh;
     min-height: 320px;
     padding: 0.5rem;
     border-radius: 12px;
@@ -610,6 +611,7 @@ input[type="range"]::-webkit-slider-thumb:active {
     align-items: center;
     justify-content: center;
     overflow: auto;
+    overscroll-behavior: contain; /* prevent page scroll from propagating through grid */
   }
 
   .touch-hint { display: block; }
@@ -628,7 +630,8 @@ input[type="range"]::-webkit-slider-thumb:active {
   .btn { font-size: 0.85rem; padding: 0.65rem 0.75rem; }
 
   .visualizer-card {
-    height: 65vh;
+    /* dvh stays stable when mobile browser chrome hides/shows */
+    height: 65dvh;
     min-height: 300px;
     padding: 0.4rem;
   }

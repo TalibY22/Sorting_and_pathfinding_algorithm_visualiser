@@ -91,14 +91,26 @@ document.addEventListener('DOMContentLoaded', () => {
   initBacktracking();
   updateEducationalContent('astar');
 
-  // Rebuild grid on resize 
+  // Rebuild grid on resize — only when the COLUMN/ROW count actually changes.
+  // Using window resize directly caused walls to be wiped on mobile because
+  // the browser chrome (URL bar) hides on scroll, firing spurious resize events.
+  let lastBuiltCols = 0;
+  let lastBuiltRows = 0;
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (activeTab === 'pathfinding' && !isRunning) buildGrid();
+      const dims = getGridDimensions();
+      if (activeTab === 'pathfinding' && !isRunning) {
+        // Only rebuild if the grid shape changes, NOT on every resize.
+        if (dims.cols !== lastBuiltCols || dims.rows !== lastBuiltRows) {
+          lastBuiltCols = dims.cols;
+          lastBuiltRows = dims.rows;
+          buildGrid();
+        }
+      }
       if (activeTab === 'backtracking' && !isRunning) buildChessboard();
-    }, 250);
+    }, 350);
   });
 });
 
@@ -340,6 +352,10 @@ function initPathfinding() {
   });
 }
 
+// Track last-built dimensions so resize events don't wipe walls on mobile scroll
+let _lastBuiltCols = 0;
+let _lastBuiltRows = 0;
+
 function buildGrid() {
   // Recalculate responsive dimensions on every build
   const dims = getGridDimensions();
@@ -371,6 +387,10 @@ function buildGrid() {
   gridContainer.style.gridTemplateColumns = `repeat(${GRID_COLS}, ${cellSize}px)`;
   gridContainer.style.width  = `${cellSize * GRID_COLS}px`;
   gridContainer.style.height = `${cellSize * GRID_ROWS}px`;
+
+  // Record what we built so the resize handler can skip spurious redraws
+  _lastBuiltCols = GRID_COLS;
+  _lastBuiltRows = GRID_ROWS;
 
   grid = [];
 
